@@ -61,7 +61,16 @@ class MirrorController(private val app: CubeRemoteApp) {
                         }
                         is VideoEvent.Packet -> {
                             val c = codec ?: continue
-                            val idx = c.dequeueInputBuffer(50_000)
+                            // Never drop a packet (H.264 frames depend on each other): drain output while waiting for an input slot.
+                            var idx = c.dequeueInputBuffer(20_000)
+                            var tries = 0
+                            while (idx < 0 && tries < 50 && !Thread.currentThread().isInterrupted) {
+                                while (true) {
+                                    val out = c.dequeueOutputBuffer(info, 0)
+                                    if (out >= 0) { c.releaseOutputBuffer(out, true); frames++ } else break
+                                }
+                                idx = c.dequeueInputBuffer(20_000); tries++
+                            }
                             if (idx >= 0) {
                                 val buf = c.getInputBuffer(idx)!!
                                 buf.clear(); buf.put(e.data)
