@@ -75,7 +75,7 @@ fun AppRoot(app: CubeRemoteApp, brain: BizzyBrain, mirror: MirrorController, sta
                 snackbarHost = { SnackbarHost(snackbar) },
                 floatingActionButton = { if (nav.current != Screen.Bizzy) BizzyFab { bizzyOpen = true } }
             ) { pad ->
-                Box(Modifier.padding(pad).fillMaxSize().background(pal.bg)) {
+                Box(Modifier.padding(pad).consumeWindowInsets(pad).imePadding().fillMaxSize().background(pal.bg)) {
                     when (nav.current) {
                         Screen.Home -> HomeScreen(deps, shared)
                         Screen.Keyboard -> KeyboardScreen(deps)

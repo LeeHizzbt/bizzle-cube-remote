@@ -5,6 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -60,7 +62,7 @@ fun AppsScreen(d: Deps) {
                 SectionCard("Deep links") {
                     Body("Open a streaming app, or paste a share link (e.g. a Netflix or YouTube link from your phone) to open it right on the TV.", alpha = 0.8f)
                     Spacer(Modifier.height(6.dp))
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth()) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp), modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState())) {
                         listOf("netflix", "prime", "youtube", "disney", "hulu").forEach { id ->
                             val svc = StreamingApps.byId(id)!!
                             val pkg = StreamingApps.installedPackage(svc, apps.map { it.pkg })
@@ -95,7 +97,7 @@ fun AppsScreen(d: Deps) {
             val fav = a.pkg in favs
             Box {
                 Column(
-                    Modifier.height(104.dp).clip(RoundedCornerShape(16.dp)).background(pal.surface)
+                    Modifier.fillMaxWidth().height(104.dp).clip(RoundedCornerShape(16.dp)).background(pal.surface)
                         .border(1.dp, pal.accent.copy(alpha = if (fav) 0.9f else 0.3f), RoundedCornerShape(16.dp))
                         .combinedClickable(onClick = { d.app.cube.run<String>("Opening ${a.label}") { it.launch(a.pkg) } }, onLongClick = { menuFor = a })
                         .semantics { contentDescription = "${a.label}${if (fav) ", favorite" else ""}. Tap to open, long press for options" }
