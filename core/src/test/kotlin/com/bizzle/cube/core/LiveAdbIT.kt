@@ -59,20 +59,16 @@ class LiveAdbIT {
     @Test fun textInputLandsInFocusedField() {
         val adb = session()
         adb.use {
-            // Open the Settings search box (has a focused EditText), type, then read it back with uiautomator
-            it.shell("am force-stop com.android.settings")
-            it.shell("am start -a android.search.action.GLOBAL_SEARCH || true")
-            it.shell("am start -n com.android.settings/.Settings\\\$WifiSettingsActivity || true")
-            Thread.sleep(3000)
-            it.shell("am start -a android.intent.action.VIEW -d 'content://contacts/people/' >/dev/null 2>&1 || true")
-            // Most reliable focused field on AOSP images: the dialer/contacts may be missing, so use a WebView-free EditText: the Settings search
-            it.shell("am start -n com.android.settings/.Settings 2>/dev/null")
-            Thread.sleep(3000)
-            it.text("bizzle cube 420")
-            Thread.sleep(2500)
+            // Quick Search Box opens with its search field focused, like a TV search box
+            it.shell("am force-stop com.android.quicksearchbox; am start -n com.android.quicksearchbox/.SearchActivity")
+            Thread.sleep(6000)
+            assertTrue(it.text("bizzle cube 420"))
+            Thread.sleep(5000)
             val dump = it.shell("uiautomator dump /sdcard/ui.xml >/dev/null 2>&1; cat /sdcard/ui.xml")
             File(out, "ui-after-text.xml").writeText(dump)
-            println("IT ui dump has text: ${dump.contains("bizzle cube 420")}")
+            println("IT ui dump has typed text: ${dump.contains("bizzle cube 420")}")
+            assertTrue("typed text not found in focused field", dump.contains("bizzle cube 420"))
+            it.keyevent(3)
         }
     }
 
@@ -124,9 +120,10 @@ class LiveAdbIT {
             val before = it.foregroundPackage()
             val s = ScrcpySession.start(it.raw(), File(jarPath).readBytes(), video = false, timeoutMs = 60_000)
             s.use { t ->
+                Thread.sleep(10_000) // the software-emulated test device needs time to finish starting the server's controller
                 val t0 = System.nanoTime(); t.key(3); val ms = (System.nanoTime() - t0) / 1e6
                 println("IT turbo key send took ${"%.1f".format(ms)} ms")
-                Thread.sleep(4000)
+                Thread.sleep(8000)
             }
             val after = it.foregroundPackage()
             println("IT turbo foreground $before -> $after")

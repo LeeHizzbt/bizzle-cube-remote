@@ -15,13 +15,15 @@ data class AiProvider(
     val baseUrl: String,
     val model: String,
     val visionModel: String,
-    val key: String
+    val key: String,
+    /** Tried in order on the same provider when the main model is overloaded (503) or missing (404). */
+    val fallbackModels: List<String> = emptyList()
 ) {
     companion object {
         const val GEMINI = "gemini"; const val GROQ = "groq"; const val OPENROUTER = "openrouter"
         val DEFAULTS = mapOf(
-            GEMINI to AiProvider(GEMINI, "Google Gemini (free tier)", "https://generativelanguage.googleapis.com/v1beta/openai", "gemini-flash-latest", "gemini-flash-latest", ""),
-            GROQ to AiProvider(GROQ, "Groq (free tier)", "https://api.groq.com/openai/v1", "llama-3.3-70b-versatile", "meta-llama/llama-4-scout-17b-16e-instruct", ""),
+            GEMINI to AiProvider(GEMINI, "Google Gemini (free tier)", "https://generativelanguage.googleapis.com/v1beta/openai", "gemini-flash-latest", "gemini-flash-latest", "", listOf("gemini-flash-lite-latest", "gemini-3.5-flash")),
+            GROQ to AiProvider(GROQ, "Groq (free tier)", "https://api.groq.com/openai/v1", "llama-3.3-70b-versatile", "meta-llama/llama-4-scout-17b-16e-instruct", "", listOf("llama-3.1-8b-instant")),
             OPENROUTER to AiProvider(OPENROUTER, "OpenRouter (free models)", "https://openrouter.ai/api/v1", "openrouter/free", "openrouter/free", "")
         )
     }
@@ -41,12 +43,18 @@ class AiClient(
         val needsVision = messages.any { it.imageDataUrl != null }
         for (p in providers) {
             if (p.key.isBlank()) { errors += "${p.label}: no key set"; continue }
-            try {
-                val content = call(p, if (needsVision) p.visionModel else p.model, messages, temperature, json)
-                if (content.isNotBlank()) return AiResult(p.label, content, errors)
-                errors += "${p.label}: empty reply"
-            } catch (e: Exception) {
-                errors += "${p.label}: ${friendly(e.message ?: e.javaClass.simpleName)}"
+            val models = (listOf(if (needsVision) p.visionModel else p.model) + if (needsVision) emptyList() else p.fallbackModels).distinct()
+            for (model in models) {
+                try {
+                    val content = call(p, model, messages, temperature, json)
+                    if (content.isNotBlank()) return AiResult("${p.label} · $model", content, errors)
+                    errors += "${p.label} ($model): empty reply"
+                } catch (e: Exception) {
+                    val m = e.message ?: e.javaClass.simpleName
+                    errors += "${p.label} ($model): ${friendly(m)}"
+                    // only overload / missing-model errors are worth another model on the same provider
+                    if (!(m.contains("HTTP 503") || m.contains("HTTP 404") || m.contains("HTTP 500"))) break
+                }
             }
         }
         return AiResult(null, null, errors)
@@ -56,7 +64,8 @@ class AiClient(
         m.contains("HTTP 429") -> "rate-limited (free quota used up, trying next)"
         m.contains("HTTP 401") || m.contains("HTTP 403") -> "key rejected (check the key in Advanced AI Settings)"
         m.contains("HTTP 404") -> "model not found (pick another model in Advanced AI Settings)"
-        m.contains("HTTP 5") -> "service is down right now"
+        m.contains("HTTP 503") -> "overloaded right now (HTTP 503)"
+        m.contains("HTTP 5") -> "service error (${m.substringAfter("HTTP ").take(3)})"
         m.contains("Unable to resolve host") || m.contains("UnknownHost") -> "offline / no internet"
         else -> m.take(160)
     }

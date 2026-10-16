@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Bizzle\'s Ultimate Cube Remote</string>
+    <string name="app_short">Cube Remote</string>
+    <string name="widget_desc">Fire TV Cube remote: D-pad, play/pause, volume</string>
+    <string name="tile_remote">Cube Remote</string>
+    <string name="tile_sleep">TV sleep timer</string>
+    <string name="tile_voice">Bizzy voice</string>
+</resources>

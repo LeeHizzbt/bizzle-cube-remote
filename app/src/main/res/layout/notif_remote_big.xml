@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="4dp">
+    <TextView android:id="@+id/n_title" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Cube Remote v4.20" android:textColor="#FF39FF14" android:textStyle="bold" android:textSize="13sp" android:paddingBottom="2dp"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:id="@+id/n_back" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="BACK" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Back"/>
+        <TextView android:id="@+id/n_up" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="▲" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Up"/>
+        <TextView android:id="@+id/n_home" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="HOME" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Home"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:id="@+id/n_left" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="◀" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Left"/>
+        <TextView android:id="@+id/n_ok" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="OK" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="OK select"/>
+        <TextView android:id="@+id/n_right" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="▶" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Right"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:id="@+id/n_mute" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="MUTE" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Mute"/>
+        <TextView android:id="@+id/n_down" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="▼" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Down"/>
+        <TextView android:id="@+id/n_close" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="✕" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Close notification remote"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+        <TextView android:id="@+id/n_voldown" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="VOL−" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Volume down"/>
+        <TextView android:id="@+id/n_playpause" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="▶❚❚" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Play pause"/>
+        <TextView android:id="@+id/n_volup" android:layout_width="0dp" android:layout_height="40dp" android:layout_weight="1" android:layout_margin="2dp"
+            android:background="@drawable/neon_btn" android:gravity="center" android:text="VOL+" android:textColor="#FF39FF14"
+            android:textSize="16sp" android:textStyle="bold" android:contentDescription="Volume up"/>
+    </LinearLayout>
+</LinearLayout>

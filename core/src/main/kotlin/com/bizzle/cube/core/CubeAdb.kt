@@ -238,7 +238,9 @@ class CubeAdb(val host: String, val port: Int, private val keyPair: AdbKeyPair) 
     }
 
     fun foregroundPackage(): String? {
-        val out = runCatching { shell("dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp' | head -2") }.getOrDefault("")
+        val out = runCatching {
+            shell("dumpsys activity activities | grep -E 'mResumedActivity' | head -1; dumpsys window | grep -E 'mCurrentFocus=Window' | head -1")
+        }.getOrDefault("")
         return Regex("""([a-zA-Z][\w.]+)/[\w.$]+""").find(out)?.groupValues?.get(1)
     }
 
