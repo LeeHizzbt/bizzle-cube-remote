@@ -1,0 +1,16 @@
+.gradle/
+build/
+*/build/
+local.properties
+keystore/
+*.jks
+*.keystore
+keystore.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild
+.cxx
+*.apk
+!docs/*.apk
+test-artifacts/tmp/
