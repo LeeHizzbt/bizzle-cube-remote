@@ -51,12 +51,7 @@ class MirrorController(private val app: CubeRemoteApp) {
                         is VideoEvent.Session -> {
                             size = e.width to e.height
                             runCatching { codec?.stop(); codec?.release() }
-                            val c = MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
-                            val fmt = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, e.width, e.height)
-                            if (android.os.Build.VERSION.SDK_INT >= 30) fmt.setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
-                            c.configure(fmt, surface, null, 0)
-                            c.start()
-                            codec = c
+                            codec = createDecoder(e.width, e.height, surface)
                             state.value = MirrorState.Live(e.width, e.height, 0f)
                         }
                         is VideoEvent.Packet -> {
@@ -117,5 +112,26 @@ class MirrorController(private val app: CubeRemoteApp) {
         runCatching { session?.close() }; session = null
         runCatching { codec?.stop() }; runCatching { codec?.release() }; codec = null
         running = false
+    }
+
+    /** Low-latency decode when the device's decoder supports it; plain decode otherwise (some decoders reject the key). */
+    private fun createDecoder(w: Int, h: Int, surface: Surface): MediaCodec {
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            val c = MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
+            try {
+                val fmt = MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, w, h)
+                fmt.setInteger(MediaFormat.KEY_LOW_LATENCY, 1)
+                c.configure(fmt, surface, null, 0)
+                c.start()
+                return c
+            } catch (e: Exception) {
+                Log.i("Mirror", "low-latency decode not supported, using normal mode: ${e.message}")
+                runCatching { c.release() }
+            }
+        }
+        val c = MediaCodec.createDecoderByType(MediaFormat.MIMETYPE_VIDEO_AVC)
+        c.configure(MediaFormat.createVideoFormat(MediaFormat.MIMETYPE_VIDEO_AVC, w, h), surface, null, 0)
+        c.start()
+        return c
     }
 }
