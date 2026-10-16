@@ -90,10 +90,17 @@ class CubeAdb(val host: String, val port: Int, private val keyPair: AdbKeyPair) 
             } catch (e: java.net.NoRouteToHostException) {
                 ConnectOutcome.Unreachable("No route to $host. Check the phone is on the same Wi-Fi as the Cube.")
             } catch (e: Exception) {
-                val cause = generateSequence<Throwable>(e) { it.cause }.last()
-                when (cause) {
-                    is java.net.ConnectException -> ConnectOutcome.Unreachable("Nothing answered on $host:$port. Is ADB Debugging ON and the IP right?")
-                    is java.net.SocketTimeoutException -> ConnectOutcome.Unreachable("Timed out reaching $host:$port. Same Wi-Fi?")
+                // On Android the innermost cause is often ErrnoException, so look at the whole chain.
+                val chain = generateSequence<Throwable>(e) { it.cause }.toList()
+                when {
+                    chain.any { it is AdbAuthException } ->
+                        ConnectOutcome.AuthRejected("The TV refused this phone. On the TV choose OK and tick 'Always allow from this computer'.")
+                    chain.any { it is java.net.NoRouteToHostException } ->
+                        ConnectOutcome.Unreachable("No route to $host. Check the phone is on the same Wi-Fi as the Cube.")
+                    chain.any { it is java.net.SocketTimeoutException } ->
+                        ConnectOutcome.Unreachable("Timed out reaching $host:$port. Same Wi-Fi? Router AP/client isolation off?")
+                    chain.any { it is java.net.ConnectException } || e.javaClass.simpleName == "AdbConnectException" ->
+                        ConnectOutcome.Unreachable("Nothing answered on $host:$port. Is ADB Debugging ON on the Cube and the IP right?")
                     else -> ConnectOutcome.Failed(e.message ?: e.javaClass.simpleName)
                 }
             } finally {
