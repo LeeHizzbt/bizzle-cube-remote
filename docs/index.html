@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bizzle's Ultimate Cube Remote v4.20</title>
+<meta name="description" content="Android remote for the Amazon Fire TV Cube: remote, keyboard, apps, live screen mirroring and the Bizzy AI.">
+<link rel="icon" href="icon.png">
+<style>
+:root{--g:#39ff14;--bg:#05070a;--card:#0d1310;--t:#e8ffe0;--m:#9fbf98}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 50% -10%,#0f3b12,var(--bg) 60%);color:var(--t);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:760px;margin:auto;padding:32px 20px 60px}
+header{text-align:center}header img{width:150px;height:150px;border-radius:32px;box-shadow:0 0 40px #39ff1466;border:2px solid var(--g)}
+h1{margin:18px 0 4px;font-size:2rem}.badge{display:inline-block;border:1px solid var(--g);color:var(--g);border-radius:999px;padding:2px 10px;font-size:.85rem;margin-left:6px;vertical-align:middle}
+.sub{color:var(--m)}
+.dl{display:block;margin:26px auto 8px;max-width:420px;text-align:center;background:var(--g);color:#031a00;font-weight:800;font-size:1.2rem;padding:16px;border-radius:16px;text-decoration:none;box-shadow:0 0 30px #39ff1488}
+.dl:focus,.dl:hover{filter:brightness(1.1)}
+.small{font-size:.85rem;color:var(--m);text-align:center;word-break:break-all}
+section{background:var(--card);border:1px solid #1d3a1a;border-radius:16px;padding:18px 20px;margin-top:20px}
+h2{color:var(--g);font-size:1.15rem;margin:0 0 8px}ol,ul{padding-left:22px;margin:6px 0}li{margin:4px 0}code{color:var(--g)}
+footer{margin-top:30px;color:var(--m);font-size:.85rem;text-align:center}a{color:var(--g)}
+</style></head><body><main>
+<header><img src="icon.png" alt="Bizzle the alien and Jinxy the cat fighting over a remote">
+<h1>Bizzle's Ultimate Cube Remote<span class="badge">v4.20</span></h1>
+<p class="sub">An Android phone remote for the Amazon Fire TV Cube. It talks to the Cube directly over your Wi-Fi.</p></header>
+<a class="dl" href="bizzle-cube-remote-v4.20.apk" download>⬇ Download APK (v4.20)</a>
+<p class="small">SHA-256: <code id="sha">76e9e0272398eff7f24e0e5ccc796964227b39150ab97d515ed9f4f0ee4275d4</code></p>
+
+<section><h2>Set it up once</h2><ol>
+<li>On the Cube: <b>Settings → My Fire TV → About</b>, then press Select on the device name <b>7 times</b> to turn on Developer Options.</li>
+<li><b>My Fire TV → Developer Options → ADB Debugging: ON</b>.</li>
+<li>Write down the Cube's IP address from <b>About → Network</b>.</li>
+<li>Install the APK on your phone (allow "install unknown apps" for your browser or file manager).</li>
+<li>Open the app. It looks for the Cube on your Wi-Fi, or you can type the IP. On the TV, tick <b>Always allow from this computer</b> and press OK.</li>
+<li>Optional: turn on HDMI-CEC on the Cube and your TV so the app can control TV power and volume.</li></ol></section>
+
+<section><h2>What it does</h2><ul>
+<li>Fast D-pad, hold-to-repeat, swipe trackpad, media keys and volume on every screen</li>
+<li>Live keyboard, phone clipboard paste and saved snippets</li>
+<li>App grid with favorites, force-stop, and links straight into Netflix, Prime, YouTube, Disney+ and Hulu</li>
+<li>Real-time screen mirroring with touch control (scrcpy), a slow-viewer fallback and screenshots</li>
+<li>Bizzy AI: voice or plain-English commands, help with what's on the TV screen, and "what should I watch". It can only run a safe list of actions.</li>
+<li>Where to watch (TMDB and TVmaze), macros, and a sleep timer</li>
+<li>Lock-screen remote, Quick Settings tiles, a home-screen widget, and themes</li></ul>
+<p class="sub">Protected video (Netflix and similar) shows up black in mirroring and screenshots. That's DRM, not a bug. You add your AI keys in the app's Settings, where they're stored encrypted on your phone.</p></section>
+
+<footer>Screen mirroring uses <a href="https://github.com/Genymobile/scrcpy">scrcpy</a> server v5.0.1 (Apache-2.0, © Genymobile).
+Title data from <a href="https://www.themoviedb.org">TMDB</a> (not endorsed or certified by TMDB), streaming availability by JustWatch via TMDB, and <a href="https://www.tvmaze.com">TVmaze</a>.<br>
+<a href="https://github.com/LeeHizzbt/bizzle-cube-remote">Source on GitHub</a> · Not affiliated with Amazon.</footer>
+</main></body></html>

@@ -16,3 +16,4 @@ captures/
 test-artifacts/tmp/
 *.log
 test-artifacts/it/*.h264
+dist/
